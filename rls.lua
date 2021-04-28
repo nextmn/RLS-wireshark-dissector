@@ -59,6 +59,7 @@ local rrc_channel_name = {
 }
 
 local rrc_channel = ProtoField.uint32("rls.rrc_channel", "RRC Channel", base.DEC, rrc_channel_name)
+local session_id = ProtoField.uint32("rls.session_id", "RLS Session ID", base.DEC)
 
 --[[
 -- Dissector definition
@@ -67,7 +68,7 @@ rls_protocol.fields = {
 	version_major, version_minor, version_patch, message_type, sti,
 	sim_pos_x, sim_pos_y, sim_pos_z,
 	mcc, mnc, long_mnc, nci, tac, dbm, gnb_name, link_ip,
-	pdu_type, rrc_channel,
+	pdu_type, rrc_channel, session_id,
 }
 
 function rls_protocol.dissector(buffer, pinfo, tree)
@@ -111,27 +112,28 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 		local pdu_type_value = buffer(13,1):uint()
 		local pdu_len = buffer(14,4):uint()
 		local payload_len = buffer(18+pdu_len,4):uint()
-		subtree:add(rrc_channel, buffer(22+pdu_len,payload_len))
 		local channel = buffer(22+pdu_len,payload_len):uint()
 		if pdu_type_value == 1 then -- RRC
+			subtree:add(rrc_channel, buffer(22+pdu_len,payload_len))
 			if channel == 0 then -- BCCH_BCH
-				Dissector.get("rrc.bcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.bcch_bch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 1 then -- BCCH_DL_SCH
-				Dissector.get("rrc.dl.shcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.dl_sch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 2 then -- DL_CCCH
-				Dissector.get("rrc.dl.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.dl_ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 3 then -- DL_DCCH
-				Dissector.get("rrc.bcch.fach"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.dl_dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 4 then -- PCCH
-				Dissector.get("rrc.pcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.pcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 5 then -- UL_CCCH
-				Dissector.get("rrc.ul.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.ul_ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 6 then -- UL_CCCH1
-				Dissector.get("rrc.ul.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.ul_ccch.nb"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 7 then -- UL_DCCH
-				Dissector.get("rrc.bcch.bch2"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("lte_rrc.ul_dcch.nb"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			end
 		elseif pdu_type_value == 2 then -- DATA
+			subtree:add(session_tunnel_id, buffer(22+pdu_len,payload_len))
 			Dissector.get("ip"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 		end
 	end
