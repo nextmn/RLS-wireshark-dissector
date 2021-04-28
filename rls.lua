@@ -21,7 +21,7 @@ local message_type_name = {
 }
 
 local message_type = ProtoField.uint8("rls.message_type", "RLS Message Type", base.DEC, message_type_name)
-local sti = ProtoField.uint64("rls.sti", "RLS STI", base.HEX)
+local sti = ProtoField.uint64("rls.sti", "RLS Temporary Identifier", base.HEX)
 
 -- For cell Info Request
 local sim_pos_x = ProtoField.uint32("rls.sim_pos_x", "RLS Position X", base.DEC)
@@ -116,21 +116,21 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 		if pdu_type_value == 1 then -- RRC
 			subtree:add(rrc_channel, buffer(22+pdu_len,payload_len))
 			if channel == 0 then -- BCCH_BCH
-				Dissector.get("lte_rrc.bcch_bch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr-rrc.bcch.bch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 1 then -- BCCH_DL_SCH
-				Dissector.get("lte_rrc.dl_sch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.dl.sch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 2 then -- DL_CCCH
-				Dissector.get("lte_rrc.dl_ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.dl.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 3 then -- DL_DCCH
-				Dissector.get("lte_rrc.dl_dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.dl.dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 4 then -- PCCH
-				Dissector.get("lte_rrc.pcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.pcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 5 then -- UL_CCCH
-				Dissector.get("lte_rrc.ul_ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.ul.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 6 then -- UL_CCCH1
-				Dissector.get("lte_rrc.ul_ccch.nb"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.ul.ccch1"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			elseif channel == 7 then -- UL_DCCH
-				Dissector.get("lte_rrc.ul_dcch.nb"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
+				Dissector.get("nr.rrc.ul.dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			end
 		elseif pdu_type_value == 2 then -- DATA
 			subtree:add(session_id, buffer(22+pdu_len,payload_len))
