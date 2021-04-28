@@ -133,7 +133,7 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 				Dissector.get("lte_rrc.ul_dcch.nb"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 			end
 		elseif pdu_type_value == 2 then -- DATA
-			subtree:add(session_tunnel_id, buffer(22+pdu_len,payload_len))
+			subtree:add(session_id, buffer(22+pdu_len,payload_len))
 			Dissector.get("ip"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 		end
 	end
