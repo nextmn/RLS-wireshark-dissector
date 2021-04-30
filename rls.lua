@@ -1,8 +1,9 @@
 --[[
--- Dissector for Radio Link Simulation Protocol (used by UERANSIM <https://github.com/aligungr/UERANSIM>).
+-- Dissector for Radio Link Simulation Protocol
+-- (used by UERANSIM <https://github.com/aligungr/UERANSIM>).
 -- When this dissector was written, UERANSIM was in version 3.1.7.
 --
--- CC0-1.0 2021 - Louis Royer
+-- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
 --]]
 
 --[[
@@ -58,6 +59,17 @@ local rrc_channel_name = {
 	[7] = "UL_DCCH",
 }
 
+local rrc_channel_dissector = {
+	[0] = "nr-rrc.bcch.bch",
+	[1] = "nr-rrc.bcch.dl.sch",
+	[2] = "nr-rrc.dl.ccch",
+	[3] = "nr-rrc.dl.dcch",
+	[4] = "nr-rrc.pcch",
+	[5] = "nr-rrc.ul.ccch",
+	[6] = "nr-rrc.ul.ccch1",
+	[7] = "nr-rrc.ul.dcch",
+}
+
 local rrc_channel = ProtoField.uint32("rls.rrc_channel", "RRC Channel", base.DEC, rrc_channel_name)
 local session_id = ProtoField.uint32("rls.session_id", "RLS Session ID", base.DEC)
 
@@ -72,12 +84,12 @@ rls_protocol.fields = {
 }
 
 function rls_protocol.dissector(buffer, pinfo, tree)
-	length = buffer:len()
+	local length = buffer:len()
 	if length == 0 then return end
 	if buffer(0,1):uint() ~= 0x03 then return end
 
 	pinfo.cols.protocol = rls_protocol.name
-	version_number = buffer(1,1):uint().."."
+	local version_number = buffer(1,1):uint().."."
 		..buffer(2,1):uint().."."
 		..buffer(3,1):uint()
 	local subtree = tree:add(rls_protocol, buffer(), "RLS Protocol Version "..version_number)
@@ -86,7 +98,7 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 	version:add(version_minor, buffer(2,1))
 	version:add(version_patch, buffer(3,1))
 	subtree:add(message_type, buffer(4,1))
-	msg_type = buffer(4,1):uint()
+	local msg_type = buffer(4,1):uint()
 	if msg_type <=0 or msg_type > 3 then return end
 	pinfo.cols.info = message_type_name[msg_type]
 	subtree:append_text(" - "..message_type_name[msg_type])
@@ -112,26 +124,10 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 		local pdu_type_value = buffer(13,1):uint()
 		local pdu_len = buffer(14,4):uint()
 		local payload_len = buffer(18+pdu_len,4):uint()
-		local channel = buffer(22+pdu_len,payload_len):uint()
 		if pdu_type_value == 1 then -- RRC
 			subtree:add(rrc_channel, buffer(22+pdu_len,payload_len))
-			if channel == 0 then -- BCCH_BCH
-				Dissector.get("nr-rrc.bcch.bch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 1 then -- BCCH_DL_SCH
-				Dissector.get("nr-rrc.dl.sch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 2 then -- DL_CCCH
-				Dissector.get("nr-rrc.dl.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 3 then -- DL_DCCH
-				Dissector.get("nr-rrc.dl.dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 4 then -- PCCH
-				Dissector.get("nr-rrc.pcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 5 then -- UL_CCCH
-				Dissector.get("nr-rrc.ul.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 6 then -- UL_CCCH1
-				Dissector.get("nr-rrc.ul.ccch1"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 7 then -- UL_DCCH
-				Dissector.get("nr-rrc.ul.dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			end
+			local channel = buffer(22+pdu_len,payload_len):uint()
+			Dissector.get(rrc_channel_dissector[channel]):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 		elseif pdu_type_value == 2 then -- DATA
 			subtree:add(session_id, buffer(22+pdu_len,payload_len))
 			Dissector.get("ip"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
