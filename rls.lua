@@ -1,5 +1,6 @@
 --[[
--- Dissector for Radio Link Simulation Protocol (used by UERANSIM <https://github.com/aligungr/UERANSIM>).
+-- Dissector for Radio Link Simulation Protocol
+-- (used by UERANSIM <https://github.com/aligungr/UERANSIM>).
 -- When this dissector was written, UERANSIM was in version 3.1.7.
 --
 -- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
@@ -83,12 +84,12 @@ rls_protocol.fields = {
 }
 
 function rls_protocol.dissector(buffer, pinfo, tree)
-	length = buffer:len()
+	local length = buffer:len()
 	if length == 0 then return end
 	if buffer(0,1):uint() ~= 0x03 then return end
 
 	pinfo.cols.protocol = rls_protocol.name
-	version_number = buffer(1,1):uint().."."
+	local version_number = buffer(1,1):uint().."."
 		..buffer(2,1):uint().."."
 		..buffer(3,1):uint()
 	local subtree = tree:add(rls_protocol, buffer(), "RLS Protocol Version "..version_number)
@@ -97,7 +98,7 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 	version:add(version_minor, buffer(2,1))
 	version:add(version_patch, buffer(3,1))
 	subtree:add(message_type, buffer(4,1))
-	msg_type = buffer(4,1):uint()
+	local msg_type = buffer(4,1):uint()
 	if msg_type <=0 or msg_type > 3 then return end
 	pinfo.cols.info = message_type_name[msg_type]
 	subtree:append_text(" - "..message_type_name[msg_type])
