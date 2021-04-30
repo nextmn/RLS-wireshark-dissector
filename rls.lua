@@ -2,7 +2,7 @@
 -- Dissector for Radio Link Simulation Protocol (used by UERANSIM <https://github.com/aligungr/UERANSIM>).
 -- When this dissector was written, UERANSIM was in version 3.1.7.
 --
--- CC0-1.0 2021 - Louis Royer
+-- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
 --]]
 
 --[[
@@ -56,6 +56,17 @@ local rrc_channel_name = {
 	[5] = "UL_CCCH",
 	[6] = "UL_CCCH1",
 	[7] = "UL_DCCH",
+}
+
+local rrc_channel_dissector = {
+	[0] = "rrc-nr.bcch.bch",
+	[1] = "rrc-nr.bcch.dl.sch",
+	[2] = "rrc-nr.dl.ccch",
+	[3] = "rrc-nr.dl.dcch",
+	[4] = "rrc-nr.pcch",
+	[5] = "rrc-nr.ul.ccch",
+	[6] = "rrc-nr.ul.ccch1",
+	[7] = "rrc-nr.ul.dcch",
 }
 
 local rrc_channel = ProtoField.uint32("rls.rrc_channel", "RRC Channel", base.DEC, rrc_channel_name)
@@ -112,26 +123,10 @@ function rls_protocol.dissector(buffer, pinfo, tree)
 		local pdu_type_value = buffer(13,1):uint()
 		local pdu_len = buffer(14,4):uint()
 		local payload_len = buffer(18+pdu_len,4):uint()
-		local channel = buffer(22+pdu_len,payload_len):uint()
 		if pdu_type_value == 1 then -- RRC
 			subtree:add(rrc_channel, buffer(22+pdu_len,payload_len))
-			if channel == 0 then -- BCCH_BCH
-				Dissector.get("nr-rrc.bcch.bch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 1 then -- BCCH_DL_SCH
-				Dissector.get("nr-rrc.dl.sch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 2 then -- DL_CCCH
-				Dissector.get("nr-rrc.dl.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 3 then -- DL_DCCH
-				Dissector.get("nr-rrc.dl.dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 4 then -- PCCH
-				Dissector.get("nr-rrc.pcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 5 then -- UL_CCCH
-				Dissector.get("nr-rrc.ul.ccch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 6 then -- UL_CCCH1
-				Dissector.get("nr-rrc.ul.ccch1"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			elseif channel == 7 then -- UL_DCCH
-				Dissector.get("nr-rrc.ul.dcch"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
-			end
+			local channel = buffer(22+pdu_len,payload_len):uint()
+			Dissector.get(rrc_channel_dissector[channel]):call(buffer(18,pdu_len):tvb(), pinfo, tree)
 		elseif pdu_type_value == 2 then -- DATA
 			subtree:add(session_id, buffer(22+pdu_len,payload_len))
 			Dissector.get("ip"):call(buffer(18,pdu_len):tvb(), pinfo, tree)
