@@ -60,14 +60,14 @@ local rrc_channel_name = {
 }
 
 local rrc_channel_dissector = {
-	[0] = "rrc-nr.bcch.bch",
-	[1] = "rrc-nr.bcch.dl.sch",
-	[2] = "rrc-nr.dl.ccch",
-	[3] = "rrc-nr.dl.dcch",
-	[4] = "rrc-nr.pcch",
-	[5] = "rrc-nr.ul.ccch",
-	[6] = "rrc-nr.ul.ccch1",
-	[7] = "rrc-nr.ul.dcch",
+	[0] = "nr-rrc.bcch.bch",
+	[1] = "nr-rrc.bcch.dl.sch",
+	[2] = "nr-rrc.dl.ccch",
+	[3] = "nr-rrc.dl.dcch",
+	[4] = "nr-rrc.pcch",
+	[5] = "nr-rrc.ul.ccch",
+	[6] = "nr-rrc.ul.ccch1",
+	[7] = "nr-rrc.ul.dcch",
 }
 
 local rrc_channel = ProtoField.uint32("rls.rrc_channel", "RRC Channel", base.DEC, rrc_channel_name)
