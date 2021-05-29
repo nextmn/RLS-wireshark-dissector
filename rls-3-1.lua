@@ -107,7 +107,19 @@ function rlsProtocol31.dissector(buffer, pinfo, tree)
 			local rrcMsgType = buffer(22+pduLength,payloadLength):uint()
 			subtree:add(fields.RrcMsgType, buffer(22+pduLength,payloadLength))
 			subtree:add(fields.PduLength, buffer(14,4))
-			Dissector.get(nrRrcDissectors[rrcMsgType]):call(buffer(18,pduLength):tvb(), pinfo, tree)
+			-- Old versions of Wireshark (< 3.0.0) cannot handle NR-RRC correctly
+			local dissector
+			local function get_dissector()
+				dissector = Dissector.get(nrRrcDissectors[rrcMsgType])
+			end
+			if pcall(get_dissector) then
+				dissector:call(buffer(18, pduLength):tvb(), pinfo, tree)
+			else
+				pinfo.cols.info = msgTypeNames[msgType]
+					.. " - " .. rrcMsgTypeNames[rrcMsgType]
+					.. " - Cannot decode"
+				return false
+			end
 		elseif pduType == 2 then -- DATA
 			subtree:add(fields.PduSessionId, buffer(22+pduLength,payloadLength))
 			subtree:add(fields.PduLength, buffer(14,4))

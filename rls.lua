@@ -30,9 +30,7 @@ if package.loaded['rls'] == nil then
 		if buffer:len() == 0 then return end
 		if buffer(0, 1):uint() ~= 0x03 then return end
 
-		-- Add default informations (will be overriden by sub-dissectors)
 		pinfo.cols.protocol = rlsProtocol.name
-		pinfo.cols.info = "Unsupported version - Cannot decode"
 
 		local version = buffer(1,2):uint()
 		local subprotocol = DissectorTable.get("rls"):get_dissector(version)
@@ -48,6 +46,7 @@ if package.loaded['rls'] == nil then
 			if subprotocol == nil then
 				local versionNumber = buffer(1, 1):uint() .. "." .. buffer(2, 1):uint() .. "." .. buffer(3, 1):uint()
 				local subtree = tree:add(rlsProtocol, buffer(), "UERANSIM Radio Link Simulation (RLS) protocol")
+				pinfo.cols.info = "Unsupported version - Cannot decode"
 				subtree:add(fields.Version, buffer(1, 3), versionNumber)
 				return 4
 			end
