@@ -7,8 +7,10 @@ stds.wireshark = {
 	read_globals = {
 		"Dissector",
 		"DissectorTable",
+		"Pref",
 		"Proto",
 		"ProtoField",
 		"base",
+		"ftypes",
 	}
 }
