@@ -5,7 +5,7 @@
 ## Quick Start
 ```
 $ mkdir -p ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins
-$ git -C ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins https://github.com/louisroyer/RLS-wireshark-dissector
+$ git -C ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins clone https://github.com/louisroyer/RLS-wireshark-dissector
 
 ```
 
