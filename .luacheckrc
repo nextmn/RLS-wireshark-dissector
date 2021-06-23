@@ -13,5 +13,6 @@ stds.wireshark = {
 		"base",
 		"ftypes",
 		"package",
+		"set_plugin_info",
 	}
 }

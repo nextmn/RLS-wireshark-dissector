@@ -9,11 +9,19 @@
 
 -- This file must only be loaded once, but each version requires it.
 if package.loaded['rls'] == nil then
+	package.loaded['rls'] = true
+	local pluginVersion = "1.1.1"
 	-- Update the following when adding new versions
 	local latestVersion = 0x0302
 	local oldestVersion = 0x0301
 
 	local rlsProtocol = Proto("RLS", "UERANSIM Radio Link Simulation (RLS) Protocol")
+	set_plugin_info({
+		version = pluginVersion,
+		author = "Louis Royer",
+		repository = "https://github.com/louisroyer/RLS-wireshark-dissector",
+		description = "Dissector for Radio Link Simulation Protocol"
+	})
 
 	-- Create a DissectorTable to register dissector for each version of RLS
 	DissectorTable.new("rls", "RLS version", ftypes.UINT32, base.HEX, rlsProtocol)

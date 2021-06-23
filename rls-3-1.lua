@@ -7,8 +7,7 @@
 --
 --]]
 if package.loaded['rls'] == nil then
-	package.prepend_path("plugins/RLS-wireshark-dissector")
-	require("rls")
+	dofile("rls")
 end
 
 local rlsProtocol31 = Proto("RLS-3.1", "UERANSIM 3.1.x Radio Link Simulation (RLS) Protocol")
