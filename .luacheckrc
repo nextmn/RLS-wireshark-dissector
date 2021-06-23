@@ -12,5 +12,6 @@ stds.wireshark = {
 		"ProtoField",
 		"base",
 		"ftypes",
+		"package",
 	}
 }
