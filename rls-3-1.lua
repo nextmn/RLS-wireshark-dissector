@@ -6,10 +6,7 @@
 -- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
 --
 --]]
-if package.loaded['rls'] == nil then
-	package.prepend_path("RLS-wireshark-dissector")
-	dofile("rls.lua")
-end
+require("rls")
 
 local rlsProtocol31 = Proto("RLS-3.1", "UERANSIM 3.1.x Radio Link Simulation (RLS) Protocol")
 local fields = rlsProtocol31.fields
