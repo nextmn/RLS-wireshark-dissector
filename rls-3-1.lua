@@ -7,7 +7,8 @@
 --
 --]]
 if package.loaded['rls'] == nil then
-	dofile("rls")
+	package.prepend_path("RLS-wireshark-dissector")
+	dofile("rls.lua")
 end
 
 local rlsProtocol31 = Proto("RLS-3.1", "UERANSIM 3.1.x Radio Link Simulation (RLS) Protocol")
