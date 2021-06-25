@@ -6,8 +6,6 @@
 -- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
 --
 --]]
-require("rls")
-
 local rlsProtocol31 = Proto("RLS-3.1", "UERANSIM 3.1.x Radio Link Simulation (RLS) Protocol")
 local fields = rlsProtocol31.fields
 
@@ -128,7 +126,9 @@ function rlsProtocol31.dissector(buffer, pinfo, tree)
 	end
 end
 
-local rls = DissectorTable.get("rls")
-rls:add(0x0301, rlsProtocol31)
-local udp_port = DissectorTable.get("udp.port")
-udp_port:add_for_decode_as(rlsProtocol31)
+function rlsProtocol31.init()
+	local rls = DissectorTable.get("rls")
+	rls:add(0x0301, rlsProtocol31)
+	local udp_port = DissectorTable.get("udp.port")
+	udp_port:add_for_decode_as(rlsProtocol31)
+end
