@@ -6,7 +6,6 @@
 -- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
 --
 --]]
-package.path = string.sub(__DIR__, 1, -("protocol/"):len()).."?.lua:"..package.path
 require("rls")
 
 local rlsProtocol31 = Proto("RLS-3.1", "UERANSIM 3.1.x Radio Link Simulation (RLS) Protocol")

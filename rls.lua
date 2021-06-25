@@ -6,10 +6,10 @@
 -- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
 --
 --]]
-
+local _M = {}
 -- This file must only be loaded once, but each version requires it.
-if package.loaded['rls'] == nil then
-	package.loaded['rls'] = true
+--if package.loaded['rls'] == nil then
+	package.loaded[...] = _M
 	local pluginVersion = "1.1.1"
 	-- Update the following when adding new versions
 	local latestVersion = 0x0302
@@ -66,4 +66,4 @@ if package.loaded['rls'] == nil then
 	local udp_port = DissectorTable.get("udp.port")
 	udp_port:add(rlsProtocol.prefs.udp_port, rlsProtocol)
 	udp_port:add_for_decode_as(rlsProtocol)
-end
+--end
