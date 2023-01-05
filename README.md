@@ -16,5 +16,5 @@ Alternalively, if you are using **Debian Bullseye**, I made a `.deb` package. It
 ## License
 This plugin is licensed under the Creative Commons Zero v1.0 Universal licence (CC0-1.0).
 
-## Troubleshouting
-If you have any issue running this plugin, please consult the [Troubleshouting page](https://github.com/louisroyer/RLS-wireshark-dissector/wiki/Troubleshooting) on the wiki.
+## Troubleshooting
+If you have any issue running this plugin, please consult the [Troubleshooting page](https://github.com/louisroyer/RLS-wireshark-dissector/wiki/Troubleshooting) on the wiki.
