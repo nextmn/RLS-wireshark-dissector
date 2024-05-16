@@ -1,0 +1,23 @@
+name: Release
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get version number
+        id: version
+        run: echo "version=$(echo ${{ github.ref_name }} | cut -c2- -)" >> $GITHUB_OUTPUT
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          makeLatest: "legacy"
+          name: "Version ${{ steps.version.outputs.version }}"
