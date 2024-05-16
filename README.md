@@ -7,7 +7,7 @@ You need to use a recent Wireshark version with implementation for `nr-rrc` diss
 ### Installation from git repository
 ```
 $ mkdir -p ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins
-$ git -C ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins clone https://github.com/louisroyer/RLS-wireshark-dissector
+$ git -C ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins clone https://github.com/nextmn/RLS-wireshark-dissector
 
 ```
 ### Installation from package manager
@@ -17,4 +17,4 @@ Alternalively, if you are using **Debian Bullseye**, I made a `.deb` package. It
 This plugin is licensed under the Creative Commons Zero v1.0 Universal licence (CC0-1.0).
 
 ## Troubleshooting
-If you have any issue running this plugin, please consult the [Troubleshooting page](https://github.com/louisroyer/RLS-wireshark-dissector/wiki/Troubleshooting) on the wiki.
+If you have any issue running this plugin, please consult the [Troubleshooting page](https://github.com/nextmn/RLS-wireshark-dissector/wiki/Troubleshooting) on the wiki.
