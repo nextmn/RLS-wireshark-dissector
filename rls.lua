@@ -3,7 +3,7 @@
 -- Dissector for Radio Link Simulation Protocol
 -- (UERANSIM project <https://github.com/aligungr/UERANSIM>).
 --
--- CC0-1.0 2021 - Louis Royer (<https://github.com/louisroyer/RLS-wireshark-dissector>)
+-- CC0-1.0 - Louis Royer (<https://github.com/nextmn/RLS-wireshark-dissector>)
 --
 --]]
 
@@ -16,7 +16,7 @@ local rlsProtocol = Proto("RLS", "UERANSIM Radio Link Simulation (RLS) Protocol"
 set_plugin_info({
 	version = pluginVersion,
 	author = "Louis Royer",
-	repository = "https://github.com/louisroyer/RLS-wireshark-dissector",
+	repository = "https://github.com/nextmn/RLS-wireshark-dissector",
 	description = "Dissector for Radio Link Simulation Protocol"
 })
 
