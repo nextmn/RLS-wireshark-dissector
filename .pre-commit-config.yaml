@@ -6,6 +6,6 @@ repos:
       - id: trailing-whitespace
       - id: mixed-line-ending
   - repo: https://github.com/lunarmodules/luacheck
-    rev: v1.1.2
+    rev: v1.2.0
     hooks:
       - id: luacheck
