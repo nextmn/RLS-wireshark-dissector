@@ -6,8 +6,8 @@ You need to use a recent Wireshark version with implementation for `nr-rrc` diss
 
 ### Installation from git repository
 ```
-$ mkdir -p ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins
-$ git -C ${XDG_LIB_HOME:-~/.local/lib}/wireshark/plugins clone https://github.com/nextmn/RLS-wireshark-dissector
+$ mkdir -p ~/.local/lib/wireshark/plugins
+$ git -C ~/.local/lib/wireshark/plugins clone https://github.com/nextmn/RLS-wireshark-dissector
 
 ```
 ### Installation from package manager
