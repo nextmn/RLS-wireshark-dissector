@@ -3,7 +3,8 @@
 -- Dissector for Radio Link Simulation Protocol
 -- (UERANSIM project <https://github.com/aligungr/UERANSIM>).
 --
--- CC0-1.0 - Louis Royer (<https://github.com/nextmn/RLS-wireshark-dissector>)
+-- SPDX-FileCopyrightText: Louis Royer and the NextMN contributors <https://github.com/nextmn/RLS-wireshark-dissector>
+-- SPDX-License-Identifier: CC0-1.0
 --
 --]]
 
