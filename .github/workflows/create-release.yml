@@ -21,3 +21,4 @@ jobs:
           generateReleaseNotes: true
           makeLatest: "legacy"
           name: "Version ${{ steps.version.outputs.version }}"
+          immutableCreate: true
