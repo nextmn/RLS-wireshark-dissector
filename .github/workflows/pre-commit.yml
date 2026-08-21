@@ -1,3 +1,4 @@
+---
 name: pre-commit
 
 on:
@@ -9,7 +10,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - run: sudo apt-get install -y luarocks
-    - uses: actions/setup-python@v6
-    - uses: pre-commit/action@v3.0.1
+      - uses: actions/checkout@v7
+      - run: sudo apt-get install -y luarocks
+      - uses: actions/setup-python@v7
+      - uses: pre-commit/action@v3.0.1
