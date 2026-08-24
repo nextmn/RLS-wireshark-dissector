@@ -1,3 +1,4 @@
+---
 version: 2
 updates:
   # Maintain dependencies for GitHub Actions
@@ -7,3 +8,17 @@ updates:
       interval: "daily"
     assignees:
       - "louisroyer"
+    groups:
+      actions-deps:
+        patterns:
+          - "*"
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "louisroyer"
+    groups:
+      pre-commit-deps:
+        patterns:
+          - "*"
